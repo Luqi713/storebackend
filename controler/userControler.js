@@ -1,4 +1,6 @@
 const { createUserModel } = require("../models/UserModel");
+const jwt = require('jsonwebtoken');
+
 
 module.exports.createUser = async (req, res) => {
   const email = req.body.email;
@@ -22,12 +24,13 @@ module.exports.signin = async (req, res) => {
     const user = await createUserModel.find({ email: email });
     if (user.length > 0) {
       if (user[0].Password === req.body.Password) {
-        res.status(200).json(user[0]);
+        const token = jwt.sign({ id: user[0]._id, email: user[0].email }, '201306');
+        res.status(200).json({user : user[0] , Token : token});
       } else {
-        res.status(400).json({ error: "invalid Password" });
+        res.status(401).json({ error: "invalid Password" });
       }
     } else {
-      res.status(400).json({ error: "invalid Email" });
+      res.status(401).json({ error: "invalid Email" });
     }
   } catch (error) {
     res.status(500).json({ error: "Server Error" });
