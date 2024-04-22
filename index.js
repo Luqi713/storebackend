@@ -2,13 +2,14 @@ const express = require('express')
 const app = express()
 const cors = require('cors') 
 app.use(cors())
-
 const ConectDB = require("./db/db");
 const { AddProduct, Products, catagory, Update, findById } = require('./controler/productControler');
 const { createUser, signin } = require('./controler/userControler');
 const port = 3001
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
